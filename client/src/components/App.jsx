@@ -1,22 +1,22 @@
+import "./App.scss";
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import AirlineView from './AirlineView';
 
 function App() {
   return (
-    <div className="App">
+    <div id="App">
 
-      <Navbar bg="dark" expand="md">
-        <Navbar.Brand><span style={{ color: "white" }}>Flight Surety</span></Navbar.Brand>
-      </Navbar>
+      <div id="navbar">
+        <Navbar bg="dark" expand="md" fixed="top">
+          <Navbar.Brand><span id="brandText">Flight Surety</span></Navbar.Brand>
+        </Navbar>
+      </div>
 
-      <Container style={{ background: "#000", color: "#fff", opacity: 0.8 }}>
-        <Row>
-          <Col>1 of 1</Col>
-        </Row>
+
+      <Container id="main">
+        <AirlineView />
       </Container>
-
     </div>
   );
 }
