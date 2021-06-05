@@ -1,11 +1,14 @@
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import { useState } from 'react';
 
 
 function AirlineView() {
+    const [name, setName] = useState("Airline");
+
     return (
         <div>
-            <h1>Airline</h1>
+            <h1>{name}</h1>
             <h2>Register New Airline</h2>
             <Form>
                 <Form.Group>
@@ -38,7 +41,7 @@ function AirlineView() {
 
             <h2>Fund Insurance Pool</h2>
             <Form>
-                <Form.Group inline>
+                <Form.Group>
                     <Form.Label>Amount (ETH)</Form.Label>
                     <Form.Control type="number" placeholder="0"></Form.Control>
                 </Form.Group>
