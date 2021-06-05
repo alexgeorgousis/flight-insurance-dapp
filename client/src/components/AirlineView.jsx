@@ -39,12 +39,8 @@ function AirlineView() {
             <h2>Fund Insurance Pool</h2>
             <Form>
                 <Form.Group inline>
-                    <Form.Label>Flight Number</Form.Label>
-                    <Form.Control type="text" placeholder="e.g. RA1234"></Form.Control>
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>Flight Time</Form.Label>
-                    <Form.Control type="text" placeholder="e.g. some convenient timestamp format...."></Form.Control>
+                    <Form.Label>Amount (ETH)</Form.Label>
+                    <Form.Control type="number" placeholder="0"></Form.Control>
                 </Form.Group>
                 <Button>Submit</Button>
             </Form>
