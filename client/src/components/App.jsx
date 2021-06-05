@@ -47,7 +47,7 @@ function App() {
             </div>
 
             <Container id="main">
-                <AirlineView />
+                <AirlineView account={account} />
             </Container>
 
         </div>

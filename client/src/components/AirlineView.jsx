@@ -1,10 +1,25 @@
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import FlightSuretyApp from '../contracts/FlightSuretyApp.json';
+import web3 from '../index';
+import config from '../config.json';
 
-
-function AirlineView() {
+function AirlineView({ account }) {
     const [name, setName] = useState("Airline");
+
+    // Fetch airline name as soon as account connects 
+    useEffect(() => {
+        async function fetchName() {
+            const address = config.local.appContractAddress;
+            const contract = new web3.eth.Contract(FlightSuretyApp.abi, address);
+            try {
+                const response = await contract.methods.getAirlineByAddress(account).call();
+                if (response.name) setName(response.name);
+            } catch (error) { console.log(error) }
+        }
+        account && fetchName();
+    }, [account]);
 
     return (
         <div>
