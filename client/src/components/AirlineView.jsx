@@ -1,25 +1,37 @@
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import FlightSuretyApp from '../contracts/FlightSuretyApp.json';
 import web3 from '../index';
 import config from '../config.json';
 
 function AirlineView({ account }) {
     const [name, setName] = useState("Airline");
+    const [authorised, setAuthorised] = useState(false);
 
-    // Fetch airline name as soon as account connects 
-    useEffect(() => {
-        async function fetchName() {
-            const address = config.local.appContractAddress;
-            const contract = new web3.eth.Contract(FlightSuretyApp.abi, address);
-            try {
-                const response = await contract.methods.getAirlineByAddress(account).call();
-                if (response.name) setName(response.name);
-            } catch (error) { console.log(error) }
-        }
-        account && fetchName();
+    const fetchName = useCallback(async () => {
+        const address = config.local.appContractAddress;
+        const contract = new web3.eth.Contract(FlightSuretyApp.abi, address);
+        try {
+            const response = await contract.methods.getAirlineByAddress(account).call();
+            return response.name;
+        } catch (error) { console.log(error) }
     }, [account]);
+
+    // Fetch airline name as soon as account connects or changes 
+    useEffect(() => {
+        if (account) fetchName()
+            .then(name => {
+                if (name) {
+                    setName(name);
+                    setAuthorised(true);
+                } else setAuthorised(false);
+            }).catch(console.log);
+    }, [account, fetchName]);
+
+    if (!authorised) {
+        return <div><center><h1>Online registered Airline accounts can view this page</h1></center></div>
+    }
 
     return (
         <div>
