@@ -19,6 +19,10 @@ contract FlightSuretyApp {
         return _owner;
     }
 
+    function registerAirline(address _addr, string memory _name) public {
+        _airlines[_addr] = Airline(_name);
+    }
+
     function getAirlineByAddress(address addr)
         public
         view
