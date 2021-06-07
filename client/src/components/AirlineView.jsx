@@ -48,7 +48,7 @@ function AirlineView({ account }) {
     }, [account, fetchAirlineInfo]);
 
     if (!authorised) {
-        return <div><center><h1>Online registered Airline accounts can view this page</h1></center></div>
+        return <div><center><h1>Only registered Airline accounts can view this page</h1></center></div>
     }
 
     return (
