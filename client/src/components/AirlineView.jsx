@@ -1,31 +1,13 @@
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { useCallback, useEffect, useState } from 'react';
-import FlightSuretyApp from '../contracts/FlightSuretyApp.json';
-import web3 from '../index';
-import config from '../config.json';
+import { useEffect, useState } from 'react';
+import { fetchAirlineInfo, registerAirline } from '../utils/web3utils';
 
 function AirlineView({ account }) {
     const [name, setName] = useState("Airline");
     const [authorised, setAuthorised] = useState(false);
     const [inAirlineAddress, setInAirlineAddress] = useState("");
     const [inAirlineName, setInAirlineName] = useState("");
-
-    const fetchAirlineInfo = useCallback(async () => {
-        const address = config.local.appContractAddress;
-        const contract = new web3.eth.Contract(FlightSuretyApp.abi, address);
-        try {
-            return await contract.methods.getAirlineByAddress(account).call();
-        } catch (error) { console.log(error) }
-    }, [account]);
-
-    const registerAirline = async () => {
-        const address = config.local.appContractAddress;
-        const contract = new web3.eth.Contract(FlightSuretyApp.abi, address);
-        try {
-            return await contract.methods.registerAirline(inAirlineAddress, inAirlineName).call();
-        } catch (error) { console.log(error) }
-    }
 
     const onSubmitRegister = (e) => {
         e.preventDefault();
@@ -38,14 +20,14 @@ function AirlineView({ account }) {
 
     // Fetch airline name as soon as account connects or changes 
     useEffect(() => {
-        if (account) fetchAirlineInfo()
+        if (account) fetchAirlineInfo(account)
             .then(info => {
                 if (info && info.name) {
                     setName(info.name);
                     setAuthorised(true);
                 } else setAuthorised(false);
             }).catch(console.log);
-    }, [account, fetchAirlineInfo]);
+    }, [account]);
 
     if (!authorised) {
         return <div><center><h1>Only registered Airline accounts can view this page</h1></center></div>
