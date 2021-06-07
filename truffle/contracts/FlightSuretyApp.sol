@@ -8,11 +8,13 @@ contract FlightSuretyApp {
         string name;
     }
     mapping(address => Airline) private _airlines;
+    uint8 private _numAirlines;
 
     constructor() {
         _owner = msg.sender;
         Airline memory ownerAirline = Airline("Owner Airline");
         _airlines[_owner] = ownerAirline;
+        _numAirlines = 1;
     }
 
     function owner() public view returns (address) {
@@ -20,7 +22,12 @@ contract FlightSuretyApp {
     }
 
     function registerAirline(address _addr, string memory _name) public {
+        if (_numAirlines < 5)
+            require(msg.sender == _owner, "Sender is not owner airline");
+        else require(_airlines[msg.sender].name != "");
+
         _airlines[_addr] = Airline(_name);
+        _numAirlines += 1;
     }
 
     function getAirlineByAddress(address addr)
@@ -29,5 +36,9 @@ contract FlightSuretyApp {
         returns (Airline memory)
     {
         return _airlines[addr];
+    }
+
+    function getNumAirlines() public view returns (uint8) {
+        return _numAirlines;
     }
 }
