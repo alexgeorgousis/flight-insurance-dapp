@@ -6,9 +6,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  background-image: url("https://raw.githubusercontent.com/udacity/FlightSurety/master/src/dapp/flight.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
+  background: white url("https://raw.githubusercontent.com/udacity/FlightSurety/master/src/dapp/flight.jpg") no-repeat top !important;
 }
 
 code {

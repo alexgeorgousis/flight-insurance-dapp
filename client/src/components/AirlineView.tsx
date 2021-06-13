@@ -7,9 +7,10 @@ import config from '../config.json';
 import FlightSuretyApp from '../contracts/FlightSuretyApp.json';
 import { useCallback } from 'react';
 import { ethers } from 'ethers';
+import { FC } from 'react';
 
 
-function AirlineView() {
+const AirlineView: FC = () => {
     const { library, account, chainId } = useWeb3React();
     const [name, setName] = useState("Airline");
     const [isRegisteredAirline, setIsRegisteredAirline] = useState(false);

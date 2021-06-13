@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Web3ReactProvider } from '@web3-react/core';
 import { ethers } from 'ethers';
+import { ChakraProvider } from '@chakra-ui/react';
 
 
 function getLibrary(provider) {
@@ -14,7 +15,9 @@ function getLibrary(provider) {
 ReactDOM.render(
   <React.StrictMode>
     <Web3ReactProvider getLibrary={getLibrary}>
-      <App />
+      <ChakraProvider>
+        <App />
+      </ChakraProvider>
     </Web3ReactProvider>
   </React.StrictMode>,
   document.getElementById('root')
