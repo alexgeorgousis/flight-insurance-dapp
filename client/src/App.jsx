@@ -1,11 +1,11 @@
 import "./App.scss";
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
-import AirlineView from './AirlineView';
+import AirlineView from './components/AirlineView';
 import Button from "react-bootstrap/esm/Button";
 import { useEffect } from "react";
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core';
-import { injectedConnector } from '../config';
+import { injectedConnector } from './config';
 
 
 function App() {
