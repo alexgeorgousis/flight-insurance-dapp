@@ -1,6 +1,6 @@
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import './AirlineView.scss';
 import { useWeb3React } from '@web3-react/core';
 import config from '../config.json';
@@ -25,7 +25,7 @@ const AirlineView: FC = () => {
         } catch (error) { console.log(error) }
     }, [account, library]);
 
-    const registerAirline = async (address, name) => {
+    const registerAirline = async (address: string, name: string) => {
         const contractAddress = config.local.appContractAddress;
         const contract = new ethers.Contract(contractAddress, FlightSuretyApp.abi, library.getSigner());
         try {
@@ -33,7 +33,7 @@ const AirlineView: FC = () => {
         } catch (error) { console.log(error) }
     }
 
-    const onSubmitRegister = (e) => {
+    const onSubmitRegister = (e: FormEvent) => {
         e.preventDefault();
         registerAirline(inAirlineAddress, inAirlineName).catch(console.log);
         setInAirlineAddress("");
@@ -42,7 +42,7 @@ const AirlineView: FC = () => {
 
     // Fetch airline name on account or network change
     useEffect(() => {
-        if (account) fetchAirlineInfo(account)
+        if (account) fetchAirlineInfo()
             .then(info => {
                 if (info && info.name) {
                     setName(info.name);
@@ -55,7 +55,7 @@ const AirlineView: FC = () => {
     if (!isRegisteredAirline) {
         return (
             <div id="AirlineViewError">
-                <center><h1>Only registered Airline accounts can view this page</h1></center>
+                <h1>Only registered Airline accounts can view this page</h1>
             </div>
         )
     }

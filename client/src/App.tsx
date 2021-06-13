@@ -1,6 +1,6 @@
 import "./App.scss";
 import Container from 'react-bootstrap/Container';
-// import AirlineView from './components/AirlineView';
+import AirlineView from './components/AirlineView';
 import { useEffect, FC } from "react";
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core';
 import { injectedConnector } from './config';
