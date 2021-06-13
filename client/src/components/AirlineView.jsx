@@ -6,6 +6,7 @@ import { useWeb3React } from '@web3-react/core';
 import config from '../config.json';
 import FlightSuretyApp from '../contracts/FlightSuretyApp.json';
 import { useCallback } from 'react';
+import { ethers } from 'ethers';
 
 
 function AirlineView() {
@@ -17,27 +18,25 @@ function AirlineView() {
 
     const fetchAirlineInfo = useCallback(async () => {
         const contractAddress = config.local.appContractAddress;
-        const contract = new library.eth.Contract(FlightSuretyApp.abi, contractAddress);
+        const contract = new ethers.Contract(contractAddress, FlightSuretyApp.abi, library);
         try {
-            return await contract.methods.getAirlineByAddress(account).call();
+            return await contract.getAirlineByAddress(account);
         } catch (error) { console.log(error) }
     }, [account, library]);
 
     const registerAirline = async (address, name) => {
         const contractAddress = config.local.appContractAddress;
-        const contract = new library.eth.Contract(FlightSuretyApp.abi, contractAddress);
+        const contract = new ethers.Contract(contractAddress, FlightSuretyApp.abi, library.getSigner());
         try {
-            console.log(contract.methods);
-            return await contract.methods.registerAirline(address, name).send({ from: account });
+            return await contract.registerAirline(address, name);
         } catch (error) { console.log(error) }
     }
 
     const onSubmitRegister = (e) => {
         e.preventDefault();
-        registerAirline(inAirlineAddress, inAirlineName)
-            .then(() => {
-                console.log("contract call completed");
-            }).catch(console.log);
+        registerAirline(inAirlineAddress, inAirlineName).catch(console.log);
+        setInAirlineAddress("");
+        setInAirlineName("");
     }
 
     // Fetch airline name on account or network change
@@ -69,6 +68,7 @@ function AirlineView() {
                     <Form.Label>Airline Address</Form.Label>
                     <Form.Control
                         onChange={(e) => setInAirlineAddress(e.target.value)}
+                        value={inAirlineAddress}
                         type="text" placeholder="e.g. 0x6c540196bF38a54d559630161544b9C9FDaB6ae0">
                     </Form.Control>
                 </Form.Group>
@@ -76,6 +76,7 @@ function AirlineView() {
                     <Form.Label>Airline Name</Form.Label>
                     <Form.Control
                         onChange={(e) => setInAirlineName(e.target.value)}
+                        value={inAirlineName}
                         type="text" placeholder="e.g. Rainbow Airways">
                     </Form.Control>
                 </Form.Group>

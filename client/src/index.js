@@ -4,11 +4,11 @@ import './index.css';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
 import { Web3ReactProvider } from '@web3-react/core';
-import Web3 from 'web3';
+import { ethers } from 'ethers';
 
 
 function getLibrary(provider) {
-  return new Web3(provider);
+  return new ethers.providers.Web3Provider(provider);
 }
 
 ReactDOM.render(
