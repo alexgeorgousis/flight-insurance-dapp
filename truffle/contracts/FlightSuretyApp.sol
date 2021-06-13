@@ -24,7 +24,7 @@ contract FlightSuretyApp {
     function registerAirline(address _addr, string memory _name) public {
         if (_numAirlines < 5)
             require(msg.sender == _owner, "Sender is not owner airline");
-        else require(_airlines[msg.sender].name != "");
+        else require(bytes(_airlines[msg.sender].name).length > 0);
 
         _airlines[_addr] = Airline(_name);
         _numAirlines += 1;

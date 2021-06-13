@@ -1,40 +1,67 @@
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useEffect, useState } from 'react';
-import { fetchAirlineInfo, registerAirline } from '../utils/web3utils';
+import './AirlineView.scss';
+import { useWeb3React } from '@web3-react/core';
+import config from '../config.json';
+import FlightSuretyApp from '../contracts/FlightSuretyApp.json';
+import { useCallback } from 'react';
 
-function AirlineView({ account }) {
+
+function AirlineView() {
+    const { library, account, chainId } = useWeb3React();
     const [name, setName] = useState("Airline");
-    const [authorised, setAuthorised] = useState(false);
+    const [isRegisteredAirline, setIsRegisteredAirline] = useState(false);
     const [inAirlineAddress, setInAirlineAddress] = useState("");
     const [inAirlineName, setInAirlineName] = useState("");
+
+    const fetchAirlineInfo = useCallback(async () => {
+        const contractAddress = config.local.appContractAddress;
+        const contract = new library.eth.Contract(FlightSuretyApp.abi, contractAddress);
+        try {
+            return await contract.methods.getAirlineByAddress(account).call();
+        } catch (error) { console.log(error) }
+    }, [account, library]);
+
+    const registerAirline = async (address, name) => {
+        const contractAddress = config.local.appContractAddress;
+        const contract = new library.eth.Contract(FlightSuretyApp.abi, contractAddress);
+        try {
+            console.log(contract.methods);
+            return await contract.methods.registerAirline(address, name).send({ from: account });
+        } catch (error) { console.log(error) }
+    }
 
     const onSubmitRegister = (e) => {
         e.preventDefault();
         registerAirline(inAirlineAddress, inAirlineName)
-            .then(success => {
-                if (success) console.log("New airline registration successful");
-                else console.log("New airline registration unsuccessful");
+            .then(() => {
+                console.log("contract call completed");
             }).catch(console.log);
     }
 
-    // Fetch airline name as soon as account connects or changes 
+    // Fetch airline name on account or network change
     useEffect(() => {
         if (account) fetchAirlineInfo(account)
             .then(info => {
                 if (info && info.name) {
                     setName(info.name);
-                    setAuthorised(true);
-                } else setAuthorised(false);
+                    setIsRegisteredAirline(true);
+                } else setIsRegisteredAirline(false);
             }).catch(console.log);
-    }, [account]);
 
-    if (!authorised) {
-        return <div><center><h1>Only registered Airline accounts can view this page</h1></center></div>
+    }, [account, chainId, fetchAirlineInfo]);
+
+    if (!isRegisteredAirline) {
+        return (
+            <div id="AirlineViewError">
+                <center><h1>Only registered Airline accounts can view this page</h1></center>
+            </div>
+        )
     }
 
     return (
-        <div>
+        <div id="AirlineView">
             <h1>{name}</h1>
             <h2>Register New Airline</h2>
             <Form onSubmit={(e) => onSubmitRegister(e)}>

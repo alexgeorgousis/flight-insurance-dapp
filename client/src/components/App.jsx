@@ -3,32 +3,34 @@ import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import AirlineView from './AirlineView';
 import Button from "react-bootstrap/esm/Button";
-import { useEffect, useState } from "react";
-import web3 from "../index";
+import { useEffect } from "react";
+import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core';
+import { injectedConnector } from '../config';
 
 
 function App() {
-    const [account, setAccount] = useState("");
+    const { account, activate, error } = useWeb3React();
+    const isUnsupportedNetwork = error instanceof UnsupportedChainIdError;
 
-    // Check if already connected to provider
     useEffect(() => {
-        web3.eth.getAccounts()
-            .then(accounts => accounts.length && setAccount(accounts[0]))
-            .catch(console.log);
-    }, []);
-
-    // Listen for account changes and disconnects 
-    useEffect(() => {
-        window.ethereum.on("accountsChanged", accounts => {
-            if (accounts.length > 0) setAccount(accounts[0]);
-            else setAccount("");
-        });
-    }, []);
+        injectedConnector.isAuthorized()
+            .then(isAuthorized => {
+                if (isAuthorized) {
+                    activate(injectedConnector);
+                }
+            });
+    }, [activate]);
 
     const connectWallet = () => {
-        web3.eth.requestAccounts()
-            .then(accounts => accounts.length && setAccount(accounts[0]))
-            .catch(console.log);
+        activate(injectedConnector);
+    }
+
+    if (isUnsupportedNetwork) {
+        return (
+            <div id="UnSupportedNetworkError">
+                <center><h1>You're connected to an unsupported network</h1></center>
+            </div>
+        );
     }
 
     return (
@@ -47,7 +49,7 @@ function App() {
             </div>
 
             <Container id="main">
-                <AirlineView account={account} />
+                <AirlineView />
             </Container>
 
         </div>
