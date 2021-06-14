@@ -1,4 +1,3 @@
-import Form from 'react-bootstrap/Form';
 import { FormEvent, useEffect, useState } from 'react';
 import './AirlineView.scss';
 import { useWeb3React } from '@web3-react/core';
@@ -7,7 +6,7 @@ import FlightSuretyApp from '../contracts/FlightSuretyApp.json';
 import { useCallback } from 'react';
 import { ethers } from 'ethers';
 import { FC } from 'react';
-import { Heading, FormControl, FormLabel, Input, Button, HStack } from '@chakra-ui/react';
+import { Heading, FormControl, FormLabel, Input, Button } from '@chakra-ui/react';
 import { Flex } from '@chakra-ui/layout';
 
 
