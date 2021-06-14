@@ -6,16 +6,18 @@ import FlightSuretyApp from '../contracts/FlightSuretyApp.json';
 import { useCallback } from 'react';
 import { ethers } from 'ethers';
 import { FC } from 'react';
-import { Heading, FormControl, FormLabel, Input, Button } from '@chakra-ui/react';
+import { Heading, FormControl, FormLabel, Input, Button, useToast } from '@chakra-ui/react';
 import { Flex } from '@chakra-ui/layout';
 
 
 const AirlineView: FC = () => {
     const { library, account, chainId } = useWeb3React();
+    const toast = useToast();
     const [name, setName] = useState("Airline");
     const [isRegisteredAirline, setIsRegisteredAirline] = useState(false);
     const [inAirlineAddress, setInAirlineAddress] = useState("");
     const [inAirlineName, setInAirlineName] = useState("");
+    const [txInProgress, setTxInProgress] = useState(false);
 
     const fetchAirlineInfo = useCallback(async () => {
         const contractAddress = config.local.appContractAddress;
@@ -35,9 +37,31 @@ const AirlineView: FC = () => {
 
     const onSubmitRegister = (e: FormEvent) => {
         e.preventDefault();
-        registerAirline(inAirlineAddress, inAirlineName).catch(console.log);
-        setInAirlineAddress("");
-        setInAirlineName("");
+        setTxInProgress(true);
+        toast({
+            title: "Transaction sent",
+            description: "Please approve the transaction to proceed.",
+            status: "info",
+            duration: 5000,
+            isClosable: true
+        });
+
+        registerAirline(inAirlineAddress, inAirlineName)
+            .then(() => {
+                setInAirlineAddress("");
+                setInAirlineName("");
+                setTxInProgress(false);
+
+                toast({
+                    title: "Transaction completed",
+                    description: "New airline registered successfully.",
+                    status: "success",
+                    duration: 5000,
+                    isClosable: true
+                });
+            })
+            .catch(error => console.log("\n--------------"));
+
     }
 
     // Fetch airline name on account or network change
@@ -83,6 +107,7 @@ const AirlineView: FC = () => {
                     </FormControl>
                     <Button
                         type="submit"
+                        disabled={txInProgress}
                         colorScheme="blue"
                         mt={4}>
                         Submit
