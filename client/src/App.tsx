@@ -1,5 +1,4 @@
 import "./App.scss";
-import Container from 'react-bootstrap/Container';
 import AirlineView from './components/AirlineView';
 import { useEffect, FC } from "react";
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core';
@@ -12,8 +11,8 @@ import {
     CloseButton,
     Flex,
     Button,
-    Box,
-    Link
+    Link,
+    Container
 } from "@chakra-ui/react";
 import { LinkIcon } from "@chakra-ui/icons";
 
@@ -52,21 +51,16 @@ const App: FC = () => {
         <div id="App">
             <Flex justifyContent="space-between" alignItems="center" bgColor="blackAlpha.700" py="10px">
                 <Link color="blue.400" ml="10px">Flight Surety</Link>
-                <Button colorScheme="blue" isDisabled={account ? true : false} onClick={() => connectWallet()} mr="10px">Connect Wallet<LinkIcon ml="4px" /></Button>
+                <Button
+                    colorScheme="blue"
+                    isDisabled={account ? true : false}
+                    onClick={() => connectWallet()}
+                    mr="10px">
+                    Connect Wallet<LinkIcon ml="4px" />
+                </Button>
             </Flex>
-            {/* <div id="navbar">
-                <Navbar bg="dark" expand="md" fixed="top">
-                    <Navbar.Brand><span id="brandText">Flight Surety</span></Navbar.Brand>
-                    <Button
-                        variant={account ? "outline-secondary" : "outline-primary"}
-                        disabled={account ? true : false}
-                        onClick={() => connectWallet()}>
-                        Connect Wallet
-                    </Button>
-                </Navbar>
-            </div>
- */}
-            <Container id="main">
+
+            <Container maxWidth="container.lg" mt="20px" p="50px" bgColor="blackAlpha.800" textColor="white">
                 <AirlineView />
             </Container>
         </div>

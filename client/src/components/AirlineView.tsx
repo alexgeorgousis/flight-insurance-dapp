@@ -1,5 +1,4 @@
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 import { FormEvent, useEffect, useState } from 'react';
 import './AirlineView.scss';
 import { useWeb3React } from '@web3-react/core';
@@ -8,6 +7,8 @@ import FlightSuretyApp from '../contracts/FlightSuretyApp.json';
 import { useCallback } from 'react';
 import { ethers } from 'ethers';
 import { FC } from 'react';
+import { Heading, FormControl, FormLabel, Input, Button, HStack } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/layout';
 
 
 const AirlineView: FC = () => {
@@ -62,53 +63,72 @@ const AirlineView: FC = () => {
 
     return (
         <div id="AirlineView">
-            <h1>{name}</h1>
-            <h2>Register New Airline</h2>
-            <Form onSubmit={(e) => onSubmitRegister(e)}>
-                <Form.Group>
-                    <Form.Label>Airline Address</Form.Label>
-                    <Form.Control
-                        onChange={(e) => setInAirlineAddress(e.target.value)}
-                        value={inAirlineAddress}
-                        type="text" placeholder="e.g. 0x6c540196bF38a54d559630161544b9C9FDaB6ae0">
-                    </Form.Control>
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>Airline Name</Form.Label>
-                    <Form.Control
-                        onChange={(e) => setInAirlineName(e.target.value)}
-                        value={inAirlineName}
-                        type="text" placeholder="e.g. Rainbow Airways">
-                    </Form.Control>
-                </Form.Group>
-                <Button type="submit">Submit</Button>
-            </Form>
+            <Flex flexDirection="column">
+                <Heading size="xl" textAlign="center" mb="10px">Welcome {name}</Heading>
+                <Heading size="lg">Register New Airline</Heading>
 
-            <hr />
+                <form onSubmit={(e) => onSubmitRegister(e)}>
+                    <FormControl id="airlineAddress" isRequired mt={4}>
+                        <FormLabel>Airline Address</FormLabel>
+                        <Input
+                            placeholder="e.g. 0x6c540196bF38a54d559630161544b9C9FDaB6ae0"
+                            value={inAirlineAddress || ""}
+                            onChange={e => setInAirlineAddress(e.target.value)} />
+                    </FormControl>
+                    <FormControl id="airlineName" isRequired mt={4}>
+                        <FormLabel>Airline Name</FormLabel>
+                        <Input
+                            placeholder="e.g. Rainbow Airways"
+                            value={inAirlineName || ""}
+                            onChange={e => setInAirlineName(e.target.value)} />
+                    </FormControl>
+                    <Button
+                        type="submit"
+                        colorScheme="blue"
+                        mt={4}>
+                        Submit
+                    </Button>
+                </form>
 
-            <h2>Register New Flight</h2>
-            <Form>
-                <Form.Group>
-                    <Form.Label>Flight Number</Form.Label>
-                    <Form.Control type="text" placeholder="e.g. RA1234"></Form.Control>
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>Flight Time</Form.Label>
-                    <Form.Control type="text" placeholder="e.g. some convenient timestamp format...."></Form.Control>
-                </Form.Group>
-                <Button>Submit</Button>
-            </Form>
+                <Heading size="lg" mt={8}>Register New Flight</Heading>
+                <form>
+                    <FormControl id="flightNumber" isRequired mt={4}>
+                        <FormLabel>Flight Number</FormLabel>
+                        <Input
+                            placeholder="e.g. RA1234"
+                        />
+                    </FormControl>
+                    <FormControl id="flightTime" isRequired mt={4}>
+                        <FormLabel>Flight Time</FormLabel>
+                        <Input
+                            placeholder="TODO: figure out time format"
+                        />
+                    </FormControl>
+                    <Button
+                        type="submit"
+                        colorScheme="blue"
+                        mt={4}>
+                        Submit
+                    </Button>
+                </form>
 
-            <hr />
-
-            <h2>Fund Insurance Pool</h2>
-            <Form>
-                <Form.Group>
-                    <Form.Label>Amount (ETH)</Form.Label>
-                    <Form.Control type="number" placeholder="0"></Form.Control>
-                </Form.Group>
-                <Button>Submit</Button>
-            </Form>
+                <Heading size="lg" mt={8}>Fund Insurance Pool</Heading>
+                <form>
+                    <FormControl id="amount" isRequired mt={4}>
+                        <FormLabel>Amount (ETH)</FormLabel>
+                        <Input
+                            type="number"
+                            placeholder="0.0"
+                        />
+                    </FormControl>
+                    <Button
+                        type="submit"
+                        colorScheme="blue"
+                        mt={4}>
+                        Submit
+                    </Button>
+                </form>
+            </Flex>
         </div>
     );
 }
